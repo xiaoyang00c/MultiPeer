@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '8.0'
   s.osx.deployment_target = '10.11'
   s.tvos.deployment_target = '9.10'
-  s.source       = { :git => "https://github.com/dingwilson/MultiPeer.git", :tag => s.version }
+  s.source       = { :git => "https://github.com/dingwilson/MultiPeer.git"}
   s.source_files  = "Sources/*.{h,m,swift}"
   s.documentation_url = 'http://wilsonding.com/MultiPeer/'
 end
