@@ -14,6 +14,8 @@ public class MultiPeer: NSObject {
     /// Singleton instance - call via MultiPeer.instance
     public static let instance = MultiPeer()
 
+    public var isHost: Bool = false
+    
     // MARK: Properties
 
     /** Conforms to MultiPeerDelegate: Handles receiving data and changes in connections */
@@ -195,7 +197,11 @@ extension MultiPeer: MCNearbyServiceAdvertiserDelegate {
     public func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
 
         OperationQueue.main.addOperation {
-            self.delegate?.multiPeer(didReceivedInvitationFromPeer: peerID, session: self.session, invitationHandler: invitationHandler)
+            if let _ = context {
+                self.delegate?.multiPeer(didReceivedInvitationFromPeer: peerID, session: self.session, invitationHandler: invitationHandler)
+            } else {
+                invitationHandler(true, self.session)
+            }
 //            invitationHandler(true, self.session)
         }
     }
@@ -217,7 +223,11 @@ extension MultiPeer: MCNearbyServiceBrowserDelegate {
         // Update the list of available peers
         availablePeers.append(Peer(peerID: peerID, state: .notConnected))
 
-        browser.invitePeer(peerID, to: session, withContext: nil, timeout: connectionTimeout)
+        if isHost {
+            browser.invitePeer(peerID, to: session, withContext: Data(), timeout: connectionTimeout)
+        } else {
+            browser.invitePeer(peerID, to: session, withContext: nil, timeout: connectionTimeout)
+        }
     }
 
     /// Lost a peer, update the list of available peers
