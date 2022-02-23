@@ -17,6 +17,9 @@ import MultipeerConnectivity
 
 public typealias MCPeerID = MultipeerConnectivity.MCPeerID
 public protocol MultiPeerDelegate: class {
+    /// received invitation
+    func multiPeer(didReceivedInvitationFromPeer peerID: MCPeerID, session: MCSession, invitationHandler: @escaping (Bool, MCSession?) -> Void)
+    
     /// didReceiveData: delegate runs on receiving data from another peer
     func multiPeer(didReceiveData data: Data, ofType type: UInt32, from peerID: MCPeerID)
 

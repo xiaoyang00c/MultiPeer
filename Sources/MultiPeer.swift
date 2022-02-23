@@ -195,7 +195,8 @@ extension MultiPeer: MCNearbyServiceAdvertiserDelegate {
     public func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
 
         OperationQueue.main.addOperation {
-            invitationHandler(true, self.session)
+            self.delegate?.multiPeer(didReceivedInvitationFromPeer: peerID, session: self.session, invitationHandler: invitationHandler)
+//            invitationHandler(true, self.session)
         }
     }
 
