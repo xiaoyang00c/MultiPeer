@@ -14,7 +14,7 @@ public class MultiPeer: NSObject {
     /// Singleton instance - call via MultiPeer.instance
     public static let instance = MultiPeer()
 
-    public var isHost: Bool = false
+    private var isHost: Bool = false
     
     // MARK: Properties
 
@@ -79,9 +79,15 @@ public class MultiPeer: NSObject {
     ///     - deviceName: String containing custom name for device
     public func initialize(serviceType: String, deviceName: String) {
         // Setup device/session properties
+        initialize(serviceType: serviceType, deviceName: deviceName, role: false)
+    }
+    
+    public func initialize(serviceType: String, deviceName: String, role: Bool = false) {
+        // Setup device/session properties
         self.serviceType = serviceType
         self.devicePeerID = MCPeerID(displayName: deviceName)
-
+        self.isHost = role
+        
         // Setup the service advertiser
         self.serviceAdvertiser = MCNearbyServiceAdvertiser(peer: self.devicePeerID,
                                                            discoveryInfo: nil,
